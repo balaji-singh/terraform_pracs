@@ -29,6 +29,7 @@ agent any
         } else {
             env.DESTROY = ""
         }*/
+         env.DESTROY = ""
         sh "terraform plan  ${env.DESTROY} -out=tfplan'"
       }
     }
