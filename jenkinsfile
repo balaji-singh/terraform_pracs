@@ -22,18 +22,18 @@ stages{
       sh "ls"
     }
   }
-  stage('terraform init'){
+  stage('init'){
     steps{
       sh 'terraform init'
     }
   }
-   stage('Terraform Plan') {
+   stage('Plan') {
       steps {
        
         sh 'terraform plan -out=tfplan'
       }
     }
-	stage('Terraform Apply') {
+	stage('Apply') {
       steps {
         
        
