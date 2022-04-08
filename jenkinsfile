@@ -5,7 +5,9 @@ pipeline{
     password (name: 'AWS_ACCESS_KEY_ID')
     password (name: 'AWS_SECRET_ACCESS_KEY')
   }
-  
+  tools {
+      terraform "terraform"
+  }
   environment {
   //PATH = "{$path}:${getTerraformPath()}"
   TF_IN_AUTOMATION = 'true'
