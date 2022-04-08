@@ -1,6 +1,13 @@
 pipeline {
 agent any
+
+
   parameters {
+    choice(
+            name: 'Action',
+            choices: ['Build', 'Destroy'],
+            description: 'The action to take'
+    )
     password (name: 'AWS_ACCESS_KEY_ID')
     password (name: 'AWS_SECRET_ACCESS_KEY')
   }
@@ -13,18 +20,28 @@ agent any
   stages {
     stage('Terraform Init') {
       steps {
-        sh "${env.TERRAFORM_HOME}/terraform init -input=false"
+        sh "terraform init -input=false"
       }
     }
     stage('Terraform Plan') {
       steps {
-        sh "${env.TERRAFORM_HOME}/terraform plan -out=tfplan -input=false '"
+          if(params.Action == 'Destroy') {
+            env.DESTROY = '-destroy'
+        } else {
+            env.DESTROY = ""
+        }
+        sh "terraform plan  ${env.DESTROY} -out=tfplan'"
       }
     }
     stage('Terraform Apply') {
       steps {
+        
         input 'Apply Plan'
-        sh "${env.TERRAFORM_HOME}/terraform apply -input=false tfplan"
+        sh("""
+        terraform apply tfplan
+         mkdir ../../Inspec/files/
+        terraform output --json > ../../Inspec/files/output.json
+         """)
       }
     }
     
