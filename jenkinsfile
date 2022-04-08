@@ -16,13 +16,13 @@ pipeline{
 stages{
   stage('zero'){
     steps{
-      sh 'pwd'
-      sh 'ls'
+      sh "pwd"
+      sh "ls"
     }
   }
   stage('terraform init'){
     steps{
-      sh 'terraform init'
+      sh "terraform init"
     }
   }
    stage('Terraform Plan') {
