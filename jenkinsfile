@@ -14,6 +14,7 @@ agent any
     TF_IN_AUTOMATION = 'true'
     AWS_ACCESS_KEY_ID = "${params.AWS_ACCESS_KEY_ID}"
     AWS_SECRET_ACCESS_KEY = "${params.AWS_SECRET_ACCESS_KEY}"
+    ACTION= "${params.ACTION}"
   }
   stages {
     stage('Terraform Init') {
@@ -23,7 +24,7 @@ agent any
     }
     stage('Terraform Plan') {
       steps {
-          if(params.Action == 'Destroy') {
+          if(ACTION == 'Destroy') {
             env.DESTROY = '-destroy'
         } else {
             env.DESTROY = ""
