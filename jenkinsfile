@@ -1,12 +1,10 @@
 pipeline {
 agent any
-
-
   parameters {
     choice(
-            name: 'Action',
-            choices: ['Build', 'Destroy'],
-            description: 'The action to take'
+        name: 'Action',
+        choices: ['Build', 'Destroy'],
+        description: 'The action to take'
     )
     password (name: 'AWS_ACCESS_KEY_ID')
     password (name: 'AWS_SECRET_ACCESS_KEY')
