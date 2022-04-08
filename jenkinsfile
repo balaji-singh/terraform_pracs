@@ -24,11 +24,11 @@ agent any
     }
     stage('Terraform Plan') {
       steps {
-          if(ACTION == 'Destroy') {
+        /*if(ACTION == 'Destroy') {
             env.DESTROY = '-destroy'
         } else {
             env.DESTROY = ""
-        }
+        }*/
         sh "terraform plan  ${env.DESTROY} -out=tfplan'"
       }
     }
