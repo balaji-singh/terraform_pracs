@@ -2,8 +2,7 @@
 provider "aws" {
   #profile    = "default"
   region     = "us-west-1"
-  access_key = "AKIARUFL5R6QP2PYGJ24"
-  secret_key = "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"
+
 }
 
 resource "aws_route53_zone" "terraform-prac" {
