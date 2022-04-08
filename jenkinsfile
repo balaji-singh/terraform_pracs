@@ -1,41 +1,34 @@
-pipeline {
-agent any
-  parameters {
-    choice(
-        name: 'Action',
-        choices: ['Build', 'Destroy'],
-        description: 'The action to take'
-    )
+pipeline{
+  agent any
+   parameters {
+    
     password (name: 'AWS_ACCESS_KEY_ID')
     password (name: 'AWS_SECRET_ACCESS_KEY')
   }
+  
   environment {
-    TF_WORKSPACE = 'tf' //Sets the Terraform Workspace
-    TF_IN_AUTOMATION = 'true'
-    AWS_ACCESS_KEY_ID = "${params.AWS_ACCESS_KEY_ID}"
-    AWS_SECRET_ACCESS_KEY = "${params.AWS_SECRET_ACCESS_KEY}"
-    ACTION= "${params.ACTION}"
-  }
-  stages {
-    stage('Terraform Init') {
-      steps {
-        sh "terraform init -input=false"
-      }
+  PATH = "{$path}:${getTerraformPath()}"
+  TF_IN_AUTOMATION = 'true'
+  AWS_ACCESS_KEY_ID = "${params.AWS_ACCESS_KEY_ID}"
+  AWS_SECRET_ACCESS_KEY = "${params.AWS_SECRET_ACCESS_KEY}"
+}
+
+stages{
+  stage('terraform init'){
+    steps{
+      sh 'terraform init'
     }
-    stage('Terraform Plan') {
+  }
+   stage('Terraform Plan') {
       steps {
-        /*if(ACTION == 'Destroy') {
-            env.DESTROY = '-destroy'
-        } else {
-            env.DESTROY = ""
-        }*/
+       
         sh "terraform plan -out=tfplan'"
       }
     }
-    stage('Terraform Apply') {
+	stage('Terraform Apply') {
       steps {
         
-        input 'Apply Plan'
+       
         sh("""
         terraform apply tfplan -auto-approve
          mkdir ../../Inspec/files/
@@ -43,6 +36,9 @@ agent any
          """)
       }
     }
-    
   }
-}
+  }
+  def getTerraformPath(){
+  tfHome = tool name: 'terraform', type: 'terraform'
+  return tfHome
+  }
